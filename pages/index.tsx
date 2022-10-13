@@ -1,24 +1,21 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import Board from '../components/Board';
-import Socket from '../components/Socket';
-
-const ENDPOINT: string = "ws://127.0.0.1:8080";
+import Head from 'next/head'
+import Link from 'next/link'
 
 function IndexPage(){
-  const socket = Socket(ENDPOINT);
-  socket.connect();
-  socket.on("connect", () => console.log("Connected")); // Debug
-  return(
-    <div>
-      <Head>
-        <h1>Connect 4</h1>
-      </Head>
-      <main>
-        <Board />
-      </main>
-    </div>
-  )
-}
-
-export default IndexPage
+    return(
+      <div>
+        <Head>
+          <title>Home Page</title>
+        </Head>
+        <main>
+          <h1>Home Page</h1>
+          <Link href="/connect4">
+            <a>Connect 4</a>
+          </Link>
+        </main>
+      </div>
+    )
+  }
+  
+  export default IndexPage
+  
