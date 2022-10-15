@@ -2,18 +2,16 @@ import { createContext, SetStateAction, useState, Dispatch } from "react";
 
 type UserContextType = {
     username: string | null;
-    setUsername: Dispatch<SetStateAction<string>> | null;
-}
+    setUsername: Dispatch<SetStateAction<string>>;
+};
 
-const IUserContextState = {
+export const UserContext = createContext<UserContextType>({
     username: null,
     setUsername: () => {}
-}
-
-export const UserContext = createContext<UserContextType>(IUserContextState);
+});
 
 const UserContextProvider = ({ children }) => {
-    const [username, setUsername] = useState<string|null>();
+    const [username, setUsername] = useState<string>();
     return (
         <UserContext.Provider value={{ username, setUsername }}>
             { children }
