@@ -9,7 +9,7 @@ const ENDPOINT: string = "ws://127.0.0.1:8080";
 
 function Connect4Page(){
   const router = useRouter();
-  const { username, setUsername } = useContext(UserContext);
+  const { username, uuid, setUserInfo } = useContext(UserContext);
   // Check if user is logged in
   if(!username){
     router.push("/login");
@@ -17,6 +17,7 @@ function Connect4Page(){
 
   const socket = Socket(ENDPOINT);
   socket.connect();
+  // socket.on("connect", )
 
   if(socket.disconnected){
     return(
@@ -27,7 +28,7 @@ function Connect4Page(){
       </div>
     )
   }
-  
+
   return(
     <>
       <Head>
@@ -36,7 +37,7 @@ function Connect4Page(){
       <main>
         <h1>Connect 4 with real time multiplayer with sockets</h1>
         <Board />
-        <button onClick={() => setUsername(null)}>Logout</button>
+        <button onClick={() => setUserInfo(null)}>Logout</button>
       </main>
     </>
   )

@@ -3,12 +3,12 @@ import { useContext, useState } from "react"
 import UserContextProvider, { UserContext } from "../context/UserContext";
 
 function LoginPage(){
-    const { username, setUsername } = useContext(UserContext);
+    const { username, setUserInfo } = useContext(UserContext);
     const [ user, setUser ] = useState<string>('');
 
     const submit = (e) => {
         e.preventDefault();
-        setUsername(user);
+        setUserInfo(user);
         Router.push('/');
     };
 

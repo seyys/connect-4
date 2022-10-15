@@ -1,7 +1,11 @@
-import io from "socket.io-client"
+import io, {Socket} from "socket.io-client"
 
-function Socket(addr: string){
-    return io(addr);
+class conn {
+    
+
+    constructor (addr: string){
+        return io(addr);
+    }
 }
 
 export default Socket
