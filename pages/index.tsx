@@ -1,10 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useContext } from 'react'
-import { UserContext } from '../context/UserContext'
 
 function IndexPage(){
-  const { username } = useContext(UserContext);
   return(
     <div>
       <Head>

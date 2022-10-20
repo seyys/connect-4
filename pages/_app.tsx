@@ -1,13 +1,16 @@
 import { AppProps } from 'next/app'
+import { useContext } from 'react'
 import Layout from '../components/Layout'
-import UserContextProvider from '../context/UserContext'
+import SocketContextComponent from '../context/Socket/Component';
+import SocketContext from '../context/Socket/Context'
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { socket, uuid, username } = useContext(SocketContext).SocketState;
   return (
-    <UserContextProvider>
+    <SocketContextComponent>
       <Layout>
         <Component {...pageProps} />
       </Layout>
-    </UserContextProvider>
+    </SocketContextComponent>
   )
 }
