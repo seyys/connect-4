@@ -19,11 +19,9 @@ def move(sid, data):
 
 @sio.on("new_room")
 async def new_room(sid):
-    print("sid", sid)
     r = Room()
     rooms.append(r)
-    print(json.dumps(r.uuid))
-    await sio.emit("room_id", json.dumps(r.uuid))
+    return json.dumps(r.uuid)
 
 @sio.event
 def disconnect(sid):
