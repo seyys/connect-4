@@ -4,8 +4,6 @@ import RoomList from '../../components/RoomList';
 import SocketContext from '../../context/Socket/Context';
 import { roomUuid } from '../../context/Socket/Types';
 
-import { io } from 'socket.io-client';
-
 function Connect4Page(){
   const [roomUuid, setRoomUuid] = useState<roomUuid|undefined>(undefined);
   const { socket } = useContext(SocketContext).SocketState;
@@ -22,9 +20,8 @@ function Connect4Page(){
 
   const makeNewRoom = () => {
     // Generate links for P1 P2 and spectator
-    socket.emit("new_room", (msg: roomUuid) => {
-      console.log(msg);
-      setRoomUuid(msg);
+    socket.emit("new_room", (msg: string) => {
+      setRoomUuid(JSON.parse(msg));
     });
   }
 
