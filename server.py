@@ -23,6 +23,10 @@ async def new_room(sid):
     rooms.append(r)
     return json.dumps(r.uuid)
 
+@sio.on("join_room")
+async def join_room(sid, message):
+    pass
+
 @sio.event
 def disconnect(sid):
     print('disconnect ', sid)
