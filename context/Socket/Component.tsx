@@ -4,6 +4,8 @@ import SocketContext, { defaultSocketContextState, SocketReducer } from "./Conte
 
 export interface ISocketContextComponentProps {}
 
+export const urlConnect4Backend = "http://0.0.0.0:8080";
+
 const SocketContextComponent: React.FunctionComponent<ISocketContextComponentProps> = ({ children }) => {
     const [SocketState, SocketDispatch] = useReducer(SocketReducer, defaultSocketContextState);
     const [loading, setLoading] = useState(true);

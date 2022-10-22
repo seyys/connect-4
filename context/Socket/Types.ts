@@ -3,3 +3,7 @@ export interface roomUuid {
     p2: string,
     spectator: string
   }
+
+  export interface joinRoomProps{
+    roomUuid: string
+  }

@@ -1,22 +1,25 @@
 import Head from 'next/head';
 import { useContext, useState } from 'react';
 import RoomList from '../../components/RoomList';
+import { urlConnect4Backend } from '../../context/Socket/Component';
 import SocketContext from '../../context/Socket/Context';
 import { roomUuid } from '../../context/Socket/Types';
+import { useSocket } from '../../hooks/useSocket';
 
 function Connect4Page(){
   const [roomUuid, setRoomUuid] = useState<roomUuid|undefined>(undefined);
-  const { socket } = useContext(SocketContext).SocketState;
+  // const { socket } = useContext(SocketContext).SocketState;
+  const socket = useSocket(urlConnect4Backend);
 
-  if(socket.disconnected){
-    return(
-      <div>
-        <main>
-          Can't connect to server!
-        </main>
-      </div>
-    )
-  }
+  // if(socket.disconnected){
+  //   return(
+  //     <div>
+  //       <main>
+  //         Can't connect to server!
+  //       </main>
+  //     </div>
+  //   )
+  // }
 
   const makeNewRoom = () => {
     // Generate links for P1 P2 and spectator
