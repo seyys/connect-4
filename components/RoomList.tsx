@@ -10,9 +10,9 @@ const RoomList: React.FC<Props> = ({ roomUuid }) => {
     if(roomUuid === undefined){
         return (<></>);
     }
-
-    const linkP1 = window.location.href + "/play/" + roomUuid.p1;
-    const linkP2 = window.location.href + "/play/" + roomUuid.p2;
+    
+    const linkP1 = window.location.href + "/play/" + roomUuid['1'];
+    const linkP2 = window.location.href + "/play/" + roomUuid['2'];
     const linkSpectator = window.location.href + '/watch/' + roomUuid.spectator;
 
     return (

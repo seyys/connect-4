@@ -1,29 +1,29 @@
 import Head from 'next/head';
-import { useContext, useState } from 'react';
+import Script from 'next/script';
+import { useContext, useState, useEffect, useRef } from 'react';
 import RoomList from '../../components/RoomList';
 import { urlConnect4Backend } from '../../context/Socket/Component';
 import SocketContext from '../../context/Socket/Context';
 import { roomUuid } from '../../context/Socket/Types';
-import { useSocket } from '../../hooks/useSocket';
+import io, { Socket } from "socket.io-client"
 
 function Connect4Page(){
   const [roomUuid, setRoomUuid] = useState<roomUuid|undefined>(undefined);
-  // const { socket } = useContext(SocketContext).SocketState;
-  const socket = useSocket(urlConnect4Backend);
+  const socket = useRef<Socket>();
 
-  // if(socket.disconnected){
-  //   return(
-  //     <div>
-  //       <main>
-  //         Can't connect to server!
-  //       </main>
-  //     </div>
-  //   )
-  // }
+    useEffect(() => {
+        socket.current = io(urlConnect4Backend);
+    }, [])
+
+    useEffect(() => {
+        return () => {
+            if (socket) socket.current.close();
+        };
+    }, [socket]);
 
   const makeNewRoom = () => {
     // Generate links for P1 P2 and spectator
-    socket.emit("new_room", (msg: string) => {
+    socket.current.emit("new_room", (msg: string) => {
       setRoomUuid(JSON.parse(msg));
     });
   }

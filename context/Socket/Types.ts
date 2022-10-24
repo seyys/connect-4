@@ -1,6 +1,6 @@
 export interface roomUuid {
-    p1: string,
-    p2: string,
+    1: string,
+    2: string,
     spectator: string
   }
 
