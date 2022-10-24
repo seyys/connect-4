@@ -11,12 +11,12 @@ const play = () => {
     const [board, setBoard] = useState<number[][]|undefined>(undefined);
 
     useEffect(() => {
-        socket.current = io(urlConnect4Backend)
+        socket.current = io(urlConnect4Backend);
         socket.current.emit("join_room", {roomUuid: slug});
         socket.current.on("update_board", (msg: string) => {
             setBoard(JSON.parse(msg));
         })
-    }, [])
+    }, [router.isReady])
 
     useEffect(() => {
         return () => {
