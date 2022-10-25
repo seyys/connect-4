@@ -11,8 +11,8 @@ function Board({ board, move }) {
         return (
           <>
             {row.map((cell, j) => {
-              let ii = i + 1;
-              let jj = j + 1;
+              let ii = i + 1; // Need to do this because 0 indexing breaks the grid
+              let jj = j + 1; // Need to do this because 0 indexing breaks the grid
               return (
                 <div className={styles.cell} style={{gridColumn: jj, gridRow: ii}} onClick={() => move(j)}>
                   {cell}
