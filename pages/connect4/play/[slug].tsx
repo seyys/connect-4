@@ -5,9 +5,12 @@ import { useEffect, useState, useRef } from "react";
 import Board from "../../../components/Connect4/Board"
 import styles from "../../../styles/Connect4.module.css"
 
-interface WinnerMessage {
-  winner: string;
+interface UpdateBoard {
+  board: number[][];
+  player_turn: string;
+  winner?: string;
 }
+
 
 const play = () => {
   const socket = useRef<Socket>();
@@ -16,21 +19,30 @@ const play = () => {
   const [board, setBoard] = useState<number[][] | undefined>(undefined);
   const [winnerFound, setWinnerFound] = useState<boolean>(false);
   const [winMessage, setWinMessage] = useState<string>("");
+  const [playerTurn, setPlayerTurn] = useState<boolean>();
+
+  const displayWinnerMessage = (winner: string) => {
+    setWinnerFound(true);
+    if(winner === slug){
+      setWinMessage("You win!");
+    }else{
+      setWinMessage("You lose!");
+    }
+  }
 
   useEffect(() => {
     socket.current = io(urlConnect4Backend);
     socket.current.emit("join_room", { roomUuid: slug });
-    socket.current.on("update_board", (msg: string) => {
-      setBoard(JSON.parse(msg));
+
+    socket.current.on("update_board", (raw: string) => {
+      const msg: UpdateBoard = JSON.parse(raw);
+      setBoard(msg.board);
+      setPlayerTurn(msg.player_turn === slug);
+      if(msg.winner) displayWinnerMessage(msg.winner);
     })
+
     socket.current.on("winner_found", (raw: string) => {
-      const msg: WinnerMessage = JSON.parse(raw);
-      setWinnerFound(true);
-      if(msg.winner === slug){
-        setWinMessage("You win!");
-      }else{
-        setWinMessage("You lose!");
-      }
+      displayWinnerMessage(JSON.parse(raw).winner);
     })
   }, [router.isReady])
 
@@ -50,7 +62,8 @@ const play = () => {
   return (
     <div className={styles.gameContainer}>
       <Board board={board} move={connect4Move} />
-      <div className={styles.winMessage}>{winMessage}</div>
+      <div className={styles.winMessage} style={{visibility: winMessage ? "visible" : "hidden"}}>{winMessage}</div>
+      <div className={styles.playerTurn} style={{visibility: winMessage ? "hidden" : "visible"}}>{playerTurn ? "Your turn" : "Opponent's turn"}</div>
     </div>
   )
 }
