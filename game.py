@@ -3,6 +3,7 @@ import pygame
 import sys
 import math
 import custom_exception
+from states import GameState, Error
 
 
 class connect4:
@@ -12,22 +13,26 @@ class connect4:
         self.num_match = num_match
         self.player_turn = 1
         self.board = board = np.zeros((self.num_rows, self.num_cols))
+        self.game_state = GameState.IN_PROGRESS
 
     def move(self, col, player):
+        if self.game_state != GameState.IN_PROGRESS:
+            return {"error": Error.GAME_OVER}
         if player != self.player_turn:
-            return "error_player_turn"
+            return {"error": Error.PLAYER_TURN}
         if not (col > 0 and col < self.num_cols):
             Exception(custom_exception.DropOutOfBoardError)
         if self.board[-1][col] != 0:
             Exception(custom_exception.DropOutOfBoardError)
-        if player != self.player_turn:
-            Exception(custom_exception.WrongPlayerTurnError)
         row = max(*np.where(self.board[:,col] == 0))
         self.board[row, col] = player
         if self.check_win(row, col, player):
-            return "win"
+            if player == 1:
+                self.game_state = GameState.P1_WIN
+            else:
+                self.game_state = GameState.P2_WIN
         self.player_turn = self.player_turn % 2 + 1
-        return None
+        return {"error": None}
     
     def check_win(self, row, col, player):
         if connect4.check_line(self.board[row,:], self.num_match, player):
