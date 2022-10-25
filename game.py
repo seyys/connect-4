@@ -14,6 +14,8 @@ class connect4:
         self.board = board = np.zeros((self.num_rows, self.num_cols))
 
     def move(self, col, player):
+        if player != self.player_turn:
+            return "error_player_turn"
         if not (col > 0 and col < self.num_cols):
             Exception(custom_exception.DropOutOfBoardError)
         if self.board[-1][col] != 0:
@@ -23,9 +25,9 @@ class connect4:
         row = max(*np.where(self.board[:,col] == 0))
         self.board[row, col] = player
         if self.check_win(row, col, player):
-            return True
+            return "win"
         self.player_turn = self.player_turn % 2 + 1
-        return False
+        return None
     
     def check_win(self, row, col, player):
         if connect4.check_line(self.board[row,:], self.num_match, player):

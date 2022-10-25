@@ -19,8 +19,9 @@ def connect(sid, environ):
 
 @sio.on("move")
 async def move(sid, data):
-    sid_map[sid].move(sid, data)
+    msg = sid_map[sid].move(sid, data)
     await sio.emit("update_board", json.dumps(list(list(x) for x in sid_map[sid].game.board)), room=sid_map[sid].room_id)
+    return msg
 
 @sio.on("new_room")
 async def new_room(sid):
