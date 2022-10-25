@@ -23,7 +23,7 @@ async def move(sid, data):
     error = room_sid_map[sid].move(sid, data)
     await sio.emit("update_board", json.dumps(list(list(x) for x in room_sid_map[sid].game.board)), room=room_sid_map[sid].room_id)
     if room_sid_map[sid].game.game_state != GameState.IN_PROGRESS:
-        await sio.emit("winner_found", json.dumps({"winner": room_sid_map[sid].game.game_state.value}), room=room_sid_map[sid].room_id)
+        await sio.emit("winner_found", json.dumps({"winner": room_sid_map[sid].uuid[room_sid_map[sid].game.game_state.value]}), room=room_sid_map[sid].room_id)
     return error
 
 @sio.on("new_room")
