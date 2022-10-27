@@ -11,18 +11,15 @@ interface UpdateBoard {
   winner?: string;
 }
 
-
 const play = () => {
   const socket = useRef<Socket>();
   const router = useRouter();
   const { slug } = router.query;
   const [board, setBoard] = useState<number[][] | undefined>(undefined);
-  const [winnerFound, setWinnerFound] = useState<boolean>(false);
-  const [winMessage, setWinMessage] = useState<string>("");
+  const [winMessage, setWinMessage] = useState<string | undefined>(undefined);
   const [playerTurn, setPlayerTurn] = useState<boolean>();
 
   const displayWinnerMessage = (winner: string) => {
-    setWinnerFound(true);
     if(winner === slug){
       setWinMessage("You win!");
     }else{
@@ -53,7 +50,7 @@ const play = () => {
   }, [socket]);
 
   const connect4Move = (col: number) => {
-    if (winnerFound) {
+    if (winMessage) {
       return;
     }
     socket.current.emit("move", { col });

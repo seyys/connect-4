@@ -1,4 +1,5 @@
 import styles from "../../styles/Connect4.module.css"
+import Cell from "./Cell";
 
 function Board({ board, move }) {
   if (board === undefined) {
@@ -15,7 +16,7 @@ function Board({ board, move }) {
               let jj = j + 1; // Need to do this because 0 indexing breaks the grid
               return (
                 <div className={styles.cell} style={{gridColumn: jj, gridRow: ii}} onClick={() => move(j)}>
-                  {cell}
+                  <Cell player={cell}/>
                 </div>
               )
             })}

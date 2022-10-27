@@ -8,7 +8,18 @@
 
 .cell {
     background-color: bisque;
-    padding: 30px;
+    padding: 0px;
+    position: relative;
+}
+
+.cellToken {
+    border-radius: 50%;
+}
+
+.cellTokenPlayer {
+    border: 5px solid red;
+    border-radius: 50%;
+    background-color: red;
 }
 
 .gameContainer {
@@ -24,5 +35,5 @@
 }
 
 .playerTurn {
-    
+
 }
