@@ -1,9 +1,7 @@
 import Head from 'next/head';
-import Script from 'next/script';
-import { useContext, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import RoomList from '../../components/RoomList';
 import { urlConnect4Backend } from '../../context/Socket/Component';
-import SocketContext from '../../context/Socket/Context';
 import { roomUuid } from '../../context/Socket/Types';
 import io, { Socket } from "socket.io-client"
 

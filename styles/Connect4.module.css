@@ -17,9 +17,7 @@
 }
 
 .cellTokenPlayer {
-    border: 5px solid red;
     border-radius: 50%;
-    background-color: red;
 }
 
 .gameContainer {
