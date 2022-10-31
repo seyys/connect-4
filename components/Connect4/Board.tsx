@@ -1,7 +1,7 @@
 import styles from "../../styles/Connect4.module.css"
 import Cell from "./Cell";
 
-function Board({ board, move }) {
+function Board({ board, winCoords, move }) {
   if (board === undefined) {
     return <></>
   }
@@ -12,9 +12,16 @@ function Board({ board, move }) {
         return (
           <>
             {row.map((cell, j) => {
-              // 0 indexing breaks the grid
+              let winningCell: boolean = false;
+              if(winCoords){
+                winningCell = winCoords.some((x: number[][]) => JSON.stringify(x) === JSON.stringify([i, j]));
+              }
               return (
-                <div className={styles.cell} style={{gridColumn: j+1, gridRow: i+1}} onClick={() => move(j)}>
+                <div className={styles.cell} style={{
+                    gridColumn: j+1,
+                    gridRow: i+1,
+                    backgroundColor: winningCell ? "green" : "bisque"
+                  }} onClick={() => move(j)}>
                   <Cell player={cell}/>
                 </div>
               )
