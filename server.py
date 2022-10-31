@@ -14,7 +14,9 @@ async def update_board(room):
     await sio.emit("update_board", json.dumps(message), room=room.room_id)
 
 async def winner_found(room):
-    await sio.emit("winner_found", json.dumps({"winner": room.uuid[room.game.game_state.value]}), room=room.room_id)
+    message = {"winner": room.uuid[room.game.game_state.value],
+                "win_idx": room.game.win_idx}
+    await sio.emit("winner_found", json.dumps(message), room=room.room_id)
 
 rooms = []
 room_sid_map = {}
@@ -47,6 +49,8 @@ async def join_room(sid, data):
     room_sid_map[sid] = r
     sio.enter_room(sid, r.room_id)
     await update_board(room_sid_map[sid])
+    if room_sid_map[sid].game.game_state != GameState.IN_PROGRESS:
+        await winner_found(room_sid_map[sid])
 
 @sio.event
 def disconnect(sid):
