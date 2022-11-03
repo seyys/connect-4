@@ -1,14 +1,20 @@
 import Image from "next/image";
-import avatar from "../../public/static/images/Connect4/avatar-doge.png"
+import fallbackAvatar from "../../public/static/images/Connect4/avatar-doge.png"
 import styles from "../../styles/Connect4.module.css"
 
-function Cell({ player }){
+function Cell({ avatars, player }){
     const colour = player == 1 ? "blue" : "red";
 
     if(!player){
         return(
             <div style={{ padding: "32px" }} />
         )
+    }
+
+    let avatar = fallbackAvatar;
+    if(avatars && avatars.hasOwnProperty(player)){
+        avatar = avatars[player];
+        console.log(avatar)
     }
 
     return (

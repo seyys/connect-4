@@ -1,7 +1,7 @@
 import styles from "../../styles/Connect4.module.css"
 import Cell from "./Cell";
 
-function Board({ board, winCoords, move }) {
+function Board({ avatars, board, winCoords, move }) {
   if (board === undefined) {
     return <></>
   }
@@ -22,7 +22,7 @@ function Board({ board, winCoords, move }) {
                     gridRow: i+1,
                     backgroundColor: winningCell ? "green" : "bisque"
                   }} onClick={() => move(j)}>
-                  <Cell player={cell}/>
+                  <Cell avatars={avatars} player={cell}/>
                 </div>
               )
             })}
