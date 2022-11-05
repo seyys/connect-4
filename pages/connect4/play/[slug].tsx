@@ -5,7 +5,6 @@ import { useEffect, useState, useRef } from "react";
 import Board from "../../../components/Connect4/Board"
 import styles from "../../../styles/Connect4.module.css"
 import AvatarUploader from "../../../components/Connect4/AvatarUploader";
-import { SIGIO } from "constants";
 
 interface UpdateBoard {
   board: number[][];
@@ -61,6 +60,11 @@ const play = () => {
       }
       setWinCoords(msg.win_idx);
     })
+
+    socket.current.on("update_avatar", (raw: string) => {
+      const msg: Avatars = JSON.parse(raw);
+      setAvatars(msg.avatars);
+    })
   }, [router.isReady])
 
   useEffect(() => {
@@ -77,16 +81,11 @@ const play = () => {
   }
 
   useEffect(() => {
-    const avatar = localStorage.getItem("avatar");
-    console.log(avatar)
+    const avatar = JSON.parse(localStorage.getItem("avatar"));
     if(avatar){
-      socket.current.emit("set_avatar", JSON.stringify({ avatar: avatar }), (raw: string) => {
-        const msg: Avatars = JSON.parse(raw);
-        console.log(msg)
-        setAvatars(msg.avatars);
-      });
+      socket.current.emit("set_avatar", JSON.stringify({ avatar: avatar }));
     }
-  }, [avatarChangedFlag]);
+  }, [avatarChangedFlag, thisPlayer]);
 
   return (
     <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
