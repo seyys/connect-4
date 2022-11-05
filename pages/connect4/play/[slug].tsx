@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import Board from "../../../components/Connect4/Board"
 import styles from "../../../styles/Connect4.module.css"
 import AvatarUploader from "../../../components/Connect4/AvatarUploader";
+import { SIGIO } from "constants";
 
 interface UpdateBoard {
   board: number[][];
@@ -18,6 +19,11 @@ interface WinnerInfo {
 
 interface InitialiseGame {
   player_number: number;
+  avatars: object;
+}
+
+interface Avatars {
+  avatars: object;
 }
 
 const play = () => {
@@ -30,12 +36,14 @@ const play = () => {
   const [winCoords, setWinCoords] = useState<number[][] | undefined>(undefined);
   const [thisPlayer, setThisPlayer] = useState<number>();
   const [avatars, setAvatars] = useState<object>();
+  const [avatarChangedFlag, setAvatarChangedFlag] = useState<boolean>();
 
   useEffect(() => {
     socket.current = io(urlConnect4Backend);
     socket.current.emit("join_room", { roomUuid: slug }, (raw: string) => {
       const msg: InitialiseGame = JSON.parse(raw);
       setThisPlayer(msg.player_number);
+      setAvatars(msg.avatars);
     });
 
     socket.current.on("update_board", (raw: string) => {
@@ -70,13 +78,18 @@ const play = () => {
 
   useEffect(() => {
     const avatar = localStorage.getItem("avatar");
+    console.log(avatar)
     if(avatar){
-      setAvatars({ [thisPlayer]: JSON.parse(localStorage.getItem("avatar")) });
+      socket.current.emit("set_avatar", JSON.stringify({ avatar: avatar }), (raw: string) => {
+        const msg: Avatars = JSON.parse(raw);
+        console.log(msg)
+        setAvatars(msg.avatars);
+      });
     }
-  }, [thisPlayer]);
+  }, [avatarChangedFlag]);
 
   return (
-    <AvatarUploader>
+    <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
       <div className={styles.gameContainer}>
         <Board avatars={avatars} board={board} winCoords={winCoords} move={connect4Move} />
         <div className={styles.winMessage} style={{visibility: winMessage ? "visible" : "hidden"}}>{winMessage}</div>

@@ -10,11 +10,13 @@ function Cell({ avatars, player }){
             <div style={{ padding: "32px" }} />
         )
     }
-
-    let avatar = fallbackAvatar;
+    
+    let avatar: any;
     if(avatars && avatars.hasOwnProperty(player)){
-        avatar = avatars[player];
-        console.log(avatar)
+        avatar = avatars[player].replace(/"/g,''); // Need to figure out why response is bracketted by "
+        console.log("avatar",avatar);
+    }else{
+        avatar = fallbackAvatar;
     }
 
     return (

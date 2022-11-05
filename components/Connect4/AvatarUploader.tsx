@@ -1,4 +1,4 @@
-function AvatarUploader({ children }) {
+function AvatarUploader({ avatarChangedFlag, setAvatarChangedFlag, children }) {
     const dragOver = (e) => {
         e.preventDefault();
     }
@@ -17,6 +17,7 @@ function AvatarUploader({ children }) {
         const reader = new FileReader()
         reader.onload = event => {
             localStorage.setItem("avatar", JSON.stringify(event.target.result));
+            setAvatarChangedFlag(!avatarChangedFlag);
         }
 
         reader.readAsDataURL(avatar);

@@ -5,7 +5,7 @@ function Board({ avatars, board, winCoords, move }) {
   if (board === undefined) {
     return <></>
   }
-
+  
   return (
     <div className={styles.board}>
       {board.map((row, i) => {
