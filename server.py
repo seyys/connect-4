@@ -46,13 +46,21 @@ async def new_room(sid):
 @sio.on("join_room")
 async def join_room(sid, data):
     r = find_room(data["roomUuid"])
-    r.player[sid] = r.find_player(data["roomUuid"])
+    r.set_sid_roomuuid_map(sid, data["roomUuid"])
     room_sid_map[sid] = r
     sio.enter_room(sid, r.room_id)
-    await update_board(room_sid_map[sid])
-    if room_sid_map[sid].game.game_state != GameState.IN_PROGRESS:
-        await winner_found(room_sid_map[sid])
-    return json.dumps({"player_number": r.player[sid]})
+    await update_board(r)
+    if r.game.game_state != GameState.IN_PROGRESS:
+        await winner_found(r)
+    return json.dumps({"player_number": r.player[sid],
+                        "avatars": r.avatar})
+
+@sio.on("set_avatar")
+async def set_avatar(sid, data):
+    r = room_sid_map[sid]
+    print(json.loads(data)["avatar"])
+    r.set_avatar(sid, json.loads(data)["avatar"])
+    return json.dumps({"avatars": r.avatar})
 
 @sio.event
 def disconnect(sid):
