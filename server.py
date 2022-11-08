@@ -38,8 +38,8 @@ async def move(sid, data):
     return error
 
 @sio.on("new_room")
-async def new_room(sid):
-    r = Room()
+async def new_room(sid, msg):
+    r = Room(json.loads(msg))
     rooms.append(r)
     return json.dumps(r.uuid)
 
@@ -58,9 +58,8 @@ async def join_room(sid, data):
 @sio.on("set_avatar")
 async def set_avatar(sid, data):
     r = room_sid_map[sid]
-    print(json.loads(data)["avatar"])
     r.set_avatar(sid, json.loads(data)["avatar"])
-    return json.dumps({"avatars": r.avatar})
+    await sio.emit("update_avatar", json.dumps({"avatars": r.avatar}), room=r.room_id)
 
 @sio.event
 def disconnect(sid):

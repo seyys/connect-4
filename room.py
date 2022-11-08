@@ -2,21 +2,17 @@ from uuid import uuid4 as uuid
 import game
 
 class Room:
-    num_rows = 6
-    num_cols = 7
-    num_match = 4
-
     @staticmethod
     def gen_uuid():
         return str(uuid()).replace('-', '')
 
-    def __init__(self):
+    def __init__(self, msg):
         self.uuid = {1: str(Room.gen_uuid()), 2: str(Room.gen_uuid()), "spectator": str(Room.gen_uuid())}
         self.player = {}
         self.avatar = {}
         self.room_id = str(Room.gen_uuid())
         # Initialise board
-        self.game = game.connect4(Room.num_rows, Room.num_cols, Room.num_match)
+        self.game = game.connect4(int(msg["num_rows"]), int(msg["num_cols"]), int(msg["num_matches"]))
     
     def move(self, sid, d):
         return self.game.move(d["col"], self.player[sid])
