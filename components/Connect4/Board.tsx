@@ -1,7 +1,7 @@
 import styles from "../../styles/Connect4.module.css"
 import Cell from "./Cell";
 
-function Board({ avatars, board, winCoords, move }) {
+function Board({ avatars, board, winCoords, move=null }) {
   if (board === undefined) {
     return <></>
   }

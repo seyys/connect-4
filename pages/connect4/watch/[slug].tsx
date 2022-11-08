@@ -1,9 +1,9 @@
 import GamePage from "../../../components/Connect4/GamePage";
 
-const play = () => {
+const watch = () => {
   return(
-    <GamePage player={true}/>
+    <GamePage player={false}/>
   )
 }
 
-export default play;
+export default watch;
