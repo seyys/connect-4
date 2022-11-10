@@ -9,7 +9,7 @@ class Room:
     def __init__(self, msg):
         self.uuid = {1: str(Room.gen_uuid()), 2: str(Room.gen_uuid()), "spectator": str(Room.gen_uuid())}
         self.player = {}
-        self.avatar = {}
+        self.playerCustomisation = {"avatar": {}, "colour": {}}
         self.room_id = str(Room.gen_uuid())
         # Initialise board
         self.game = game.connect4(int(msg["num_rows"]), int(msg["num_cols"]), int(msg["num_matches"]))
@@ -32,5 +32,8 @@ class Room:
     def set_sid_roomuuid_map(self, sid, player):
         self.player[sid] = self.find_player(player)
 
-    def set_avatar(self, sid, avatar):
-        self.avatar[self.player[sid]] = avatar
+    def set_avatar(self, sid, data):
+        if data["avatar"] != None:
+            self.playerCustomisation["avatar"][self.player[sid]] = data["avatar"]
+        if data["colour"] != None:
+            self.playerCustomisation["colour"][self.player[sid]] = data["colour"]
