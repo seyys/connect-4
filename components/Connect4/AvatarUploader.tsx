@@ -36,7 +36,10 @@ function AvatarUploader({ avatarChangedFlag, setAvatarChangedFlag, children }) {
 
   const drop = (e) => {
     e.preventDefault();
-    const avatar = e.dataTransfer.files[0];
+    let avatar;
+    if(e.type === "change") avatar = e.target.files[0];
+    if(e.type === "drop") avatar = e.dataTransfer.files[0];
+    console.log(avatar)
     if (!avatar) {
       return;
     }
@@ -57,7 +60,10 @@ function AvatarUploader({ avatarChangedFlag, setAvatarChangedFlag, children }) {
 
   return (
     <div onDragOver={(e) => dragOver(e)} onDrop={(e) => drop(e)}>
-      {children}
+      <label>
+        {children}      
+        <input type="file" accept="image/*" style={{ display: "none" }} onChange={(e) => drop(e)} />
+      </label>
     </div>
   )
 }

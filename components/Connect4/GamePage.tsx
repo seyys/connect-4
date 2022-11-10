@@ -34,6 +34,9 @@ interface SetAvatar {
   colour: string;
 }
 
+const NUM_PLAYERS = 2;
+const initPlayerColours = {1: "#0000FF", 2: "#FF0000"};
+
 function GamePage({ player }) {
   const socket = useRef<Socket>();
   const router = useRouter();
@@ -45,7 +48,7 @@ function GamePage({ player }) {
   const [thisPlayer, setThisPlayer] = useState<number>();
   const [avatars, setAvatars] = useState<object>();
   const [avatarChangedFlag, setAvatarChangedFlag] = useState<boolean>();
-  const [playerColours, setPlayerColours] = useState<object>({1: "#0000FF", 2: "#FF0000"});
+  const [playerColours, setPlayerColours] = useState<object>(initPlayerColours);
   const [colour, setColour] = useState<string>();
 
   useEffect(() => {
@@ -80,9 +83,7 @@ function GamePage({ player }) {
 
   const setPlayerCustomisation = (msg) => {
     setAvatars(msg.avatars["avatar"]);
-    if(msg.avatars["colour"] && msg.avatars["colour"].hasOwnProperty(1) && msg.avatars["colour"].hasOwnProperty(2)){
-      setPlayerColours(msg.avatars["colour"]);
-    }
+    setPlayerColours(msg.avatars["colour"]);
   }
 
   useEffect(() => {
@@ -129,7 +130,7 @@ function GamePage({ player }) {
           <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
             <div className={styles.board} style={{ width: "64px" }}>
               <div className={styles.cellTokenPlayer} style={{ border: "5px solid", borderColor: playerColours[thisPlayer], backgroundColor: playerColours[thisPlayer] }}>
-                <Image className={styles.cellToken} src={(avatars && avatars.hasOwnProperty(thisPlayer)) ? avatars[thisPlayer] : fallbackAvatar} width="54px !important" height="54px !important" />
+                <Image className={styles.cellToken} src={(avatars && avatars.hasOwnProperty(thisPlayer)) ? avatars[thisPlayer] : fallbackAvatar} width="50px !important" height="50px !important" />
               </div>
             </div>
           </AvatarUploader>
