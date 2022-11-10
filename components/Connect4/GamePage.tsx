@@ -5,6 +5,8 @@ import { useEffect, useState, useRef } from "react";
 import Board from "../../components/Connect4/Board"
 import styles from "../../styles/Connect4.module.css"
 import AvatarUploader from "../../components/Connect4/AvatarUploader";
+import Image from "next/image"
+import fallbackAvatar from "../../public/static/images/Connect4/avatar-doge.png"
 
 interface UpdateBoard {
   board: number[][];
@@ -19,10 +21,17 @@ interface WinnerInfo {
 interface InitialiseGame {
   player_number: number;
   avatars: object;
+  colour: object;
 }
 
 interface Avatars {
   avatars: object;
+  colour: object;
+}
+
+interface SetAvatar {
+  avatar: object;
+  colour: string;
 }
 
 function GamePage({ player }) {
@@ -36,13 +45,15 @@ function GamePage({ player }) {
   const [thisPlayer, setThisPlayer] = useState<number>();
   const [avatars, setAvatars] = useState<object>();
   const [avatarChangedFlag, setAvatarChangedFlag] = useState<boolean>();
+  const [playerColours, setPlayerColours] = useState<object>({1: "#0000FF", 2: "#FF0000"});
+  const [colour, setColour] = useState<string>();
 
   useEffect(() => {
     socket.current = io(urlConnect4Backend);
     socket.current.emit("join_room", { roomUuid: slug }, (raw: string) => {
       const msg: InitialiseGame = JSON.parse(raw);
       setThisPlayer(msg.player_number);
-      setAvatars(msg.avatars);
+      setPlayerCustomisation(msg);
     });
 
     socket.current.on("update_board", (raw: string) => {
@@ -63,9 +74,16 @@ function GamePage({ player }) {
 
     socket.current.on("update_avatar", (raw: string) => {
       const msg: Avatars = JSON.parse(raw);
-      setAvatars(msg.avatars);
+      setPlayerCustomisation(msg);
     })
   }, [router.isReady])
+
+  const setPlayerCustomisation = (msg) => {
+    setAvatars(msg.avatars["avatar"]);
+    if(msg.avatars["colour"] && msg.avatars["colour"].hasOwnProperty(1) && msg.avatars["colour"].hasOwnProperty(2)){
+      setPlayerColours(msg.avatars["colour"]);
+    }
+  }
 
   useEffect(() => {
     return () => {
@@ -82,26 +100,51 @@ function GamePage({ player }) {
 
   useEffect(() => {
     const avatar = JSON.parse(localStorage.getItem("avatar"));
+    const colour = JSON.parse(localStorage.getItem("colour"));
+    let msg: SetAvatar = { avatar: null, colour: null };
     if (avatar) {
-      socket.current.emit("set_avatar", JSON.stringify({ avatar: avatar }));
+      msg.avatar = avatar;
     }
+    if (colour) {
+      msg.colour = colour;
+    }else{
+      msg.colour = (thisPlayer === 1) ? "#0000FF" : "#FF0000";
+    }
+    socket.current.emit("set_avatar", JSON.stringify(msg));
   }, [avatarChangedFlag, thisPlayer]);
+
+  const changeColour = (e) => {
+    e.preventDefault();
+    localStorage.setItem("colour", JSON.stringify(colour));
+    socket.current.emit("set_avatar", JSON.stringify({ avatar: null, colour: colour }));
+  }
 
   if (player) {
     return (
-      <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
+      <div>
         <div className={styles.gameContainer}>
-          <Board avatars={avatars} board={board} winCoords={winCoords} move={connect4Move} />
+          <Board avatars={avatars} playerColours={playerColours} board={board} winCoords={winCoords} move={connect4Move} />
           <div className={styles.winMessage} style={{ visibility: winMessage ? "visible" : "hidden" }}>{winMessage}</div>
           <div className={styles.playerTurn} style={{ visibility: winMessage ? "hidden" : "visible" }}>{playerTurn ? "Your turn" : "Opponent's turn"}</div>
+          <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
+            <div className={styles.board} style={{ width: "64px" }}>
+              <div className={styles.cellTokenPlayer} style={{ border: "5px solid", borderColor: playerColours[thisPlayer], backgroundColor: playerColours[thisPlayer] }}>
+                <Image className={styles.cellToken} src={(avatars && avatars.hasOwnProperty(thisPlayer)) ? avatars[thisPlayer] : fallbackAvatar} width="54px !important" height="54px !important" />
+              </div>
+            </div>
+          </AvatarUploader>
+          <form onSubmit={(e) => {changeColour(e)}}>
+            <input type="color" onChange={(e) => setColour(e.target.value)}/>
+            <input type="submit" value="Confirm"/>
+          </form>
         </div>
-      </AvatarUploader>
+      </div>
     )
-  }else{
+  } else {
     return (
       <div className={styles.gameContainer}>
-      <Board avatars={avatars} board={board} winCoords={winCoords} />
-    </div>
+        <Board avatars={avatars} playerColours={playerColours} board={board} winCoords={winCoords} />
+      </div>
     )
   }
 }
