@@ -12,7 +12,7 @@ function Cell({ avatar, colour, player }) {
 
   return (
     <div className={styles.cellTokenPlayer} style={{ border: "5px solid", borderColor: colour, backgroundColor: colour }}>
-      <Image className={styles.cellToken} src={avatar} width="50px !important" height="50px !important" />
+      <Image className={styles.cellToken} src={avatar} width="54px !important" height="54px !important"/>
     </div>
   )
 }

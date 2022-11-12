@@ -17,6 +17,10 @@
 
 .cellTokenPlayer {
     border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    min-width: 54px;
+    min-height: 54px;
 }
 
 .gameContainer {
