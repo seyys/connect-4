@@ -39,7 +39,6 @@ function AvatarUploader({ avatarChangedFlag, setAvatarChangedFlag, children }) {
     let avatar;
     if(e.type === "change") avatar = e.target.files[0];
     if(e.type === "drop") avatar = e.dataTransfer.files[0];
-    console.log(avatar)
     if (!avatar) {
       return;
     }
