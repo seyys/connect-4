@@ -2,7 +2,7 @@ import styles from "../../styles/Connect4.module.css"
 import Cell from "./Cell";
 import fallbackAvatar from "../../public/static/images/Connect4/avatar-doge.png"
 
-function Board({ avatars, playerColours, board, winCoords, move = null }) {
+function Board({ avatars, playerColours, board, winCoords, move = (_) => {} }) {
   if (board === undefined) {
     return <></>
   }
