@@ -1,2 +1,5 @@
 python-socketio
 python-engineio
+pygame
+numpy
+aiohttp
