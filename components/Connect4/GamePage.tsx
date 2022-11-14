@@ -7,6 +7,7 @@ import styles from "../../styles/Connect4.module.css"
 import AvatarUploader from "../../components/Connect4/AvatarUploader";
 import Image from "next/image"
 import fallbackAvatar from "../../public/static/images/Connect4/avatar-doge.png"
+import HoverRow from "./HoverRow";
 
 interface UpdateBoard {
   board: number[][];
@@ -50,6 +51,7 @@ function GamePage({ player }) {
   const [avatarChangedFlag, setAvatarChangedFlag] = useState<boolean>();
   const [playerColours, setPlayerColours] = useState<object>(initPlayerColours);
   const [colour, setColour] = useState<string>();
+  const [hoverCol, setHoverCol] = useState<number | null>();
 
   useEffect(() => {
     socket.current = io(urlConnect4Backend);
@@ -124,7 +126,8 @@ function GamePage({ player }) {
     return (
       <div>
         <div className={styles.gameContainer}>
-          <Board avatars={avatars} playerColours={playerColours} board={board} winCoords={winCoords} move={connect4Move} />
+          <HoverRow board={board} avatars={avatars} playerColours={playerColours} thisPlayer={thisPlayer} playerTurn={playerTurn} hoverCol={hoverCol}/>
+          <Board avatars={avatars} playerColours={playerColours} board={board} winCoords={winCoords} setHoverCol={setHoverCol} move={connect4Move} />
           <div className={styles.winMessage} style={{ visibility: winMessage ? "visible" : "hidden" }}>{winMessage}</div>
           <div className={styles.playerTurn} style={{ visibility: winMessage ? "hidden" : "visible" }}>{playerTurn ? "Your turn" : "Opponent's turn"}</div>
           <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
