@@ -8,7 +8,7 @@ function Board({ avatars, playerColours, board, winCoords, setHoverCol = (_) => 
   }
 
   return (
-    <div className={styles.board} onMouseOut={() => setHoverCol(null)}>
+    <div className={styles.board} onMouseLeave={() => setHoverCol(null)}>
       {board.map((row, i) => {
         return (
           <>
