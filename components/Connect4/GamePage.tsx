@@ -36,7 +36,7 @@ interface SetAvatar {
 }
 
 const NUM_PLAYERS = 2;
-const initPlayerColours = {1: "#0000FF", 2: "#FF0000"};
+const initPlayerColours = { 1: "#0000FF", 2: "#FF0000" };
 
 function GamePage({ player }) {
   const socket = useRef<Socket>();
@@ -110,7 +110,7 @@ function GamePage({ player }) {
     }
     if (colour) {
       msg.colour = colour;
-    }else{
+    } else {
       msg.colour = (thisPlayer === 1) ? "#0000FF" : "#FF0000";
     }
     socket.current.emit("set_avatar", JSON.stringify(msg));
@@ -126,10 +126,13 @@ function GamePage({ player }) {
     return (
       <div>
         <div className={styles.gameContainer}>
-          <HoverRow board={board} avatars={avatars} playerColours={playerColours} thisPlayer={thisPlayer} playerTurn={playerTurn} hoverCol={hoverCol}/>
+          <HoverRow board={board} avatars={avatars} playerColours={playerColours} thisPlayer={thisPlayer} playerTurn={playerTurn} hoverCol={hoverCol} />
           <Board avatars={avatars} playerColours={playerColours} board={board} winCoords={winCoords} setHoverCol={setHoverCol} move={connect4Move} />
-          <div className={styles.winMessage} style={{ visibility: winMessage ? "visible" : "hidden" }}>{winMessage}</div>
-          <div className={styles.playerTurn} style={{ visibility: winMessage ? "hidden" : "visible" }}>{playerTurn ? "Your turn" : "Opponent's turn"}</div>
+          {
+            winMessage ?
+              <div className={styles.winMessage}>{winMessage}</div> :
+              <div className={styles.playerTurn}>{playerTurn ? "Your turn" : "Opponent's turn"}</div>
+          }
           <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
             <div className={styles.board} style={{ width: "64px" }}>
               <div className={styles.cellTokenPlayer} style={{ border: "5px solid", borderColor: playerColours[thisPlayer], backgroundColor: playerColours[thisPlayer] }}>
@@ -137,9 +140,9 @@ function GamePage({ player }) {
               </div>
             </div>
           </AvatarUploader>
-          <form onSubmit={(e) => {changeColour(e)}}>
-            <input type="color" onChange={(e) => setColour(e.target.value)}/>
-            <input type="submit" value="Confirm"/>
+          <form onSubmit={(e) => { changeColour(e) }}>
+            <input type="color" onChange={(e) => setColour(e.target.value)} />
+            <input type="submit" value="Confirm" />
           </form>
         </div>
       </div>
