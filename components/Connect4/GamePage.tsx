@@ -134,7 +134,7 @@ function GamePage({ player }) {
               <div className={styles.playerTurn}>{playerTurn ? "Your turn" : "Opponent's turn"}</div>
           }
           <AvatarUploader avatarChangedFlag={avatarChangedFlag} setAvatarChangedFlag={setAvatarChangedFlag}>
-            <div className={styles.board} style={{ width: "64px" }}>
+            <div className={styles.board}>
               <div className={styles.cellTokenPlayer} style={{ border: "5px solid", borderColor: playerColours[thisPlayer], backgroundColor: playerColours[thisPlayer] }}>
                 <Image className={styles.cellToken} src={(avatars && avatars.hasOwnProperty(thisPlayer)) ? avatars[thisPlayer] : fallbackAvatar} width="54px !important" height="54px !important" />
               </div>
