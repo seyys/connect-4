@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+  connect-4-client:
+    image: connect-4-client:latest
+    container_name: connect-4-client
+    ports:
+      - 3000:3000
+  connect-4-server:
+    image: connect-4-server:latest
+    container_name: connect-4-server
+    ports:
+      - 8080:8080
